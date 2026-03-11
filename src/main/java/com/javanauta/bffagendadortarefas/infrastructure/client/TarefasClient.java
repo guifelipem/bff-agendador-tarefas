@@ -2,7 +2,6 @@ package com.javanauta.bffagendadortarefas.infrastructure.client;
 
 import com.javanauta.bffagendadortarefas.business.dto.in.TarefasDTORequest;
 import com.javanauta.bffagendadortarefas.business.dto.out.TarefasDTOResponse;
-import com.javanauta.bffagendadortarefas.business.dto.in.UsuarioDTORequest;
 import com.javanauta.bffagendadortarefas.business.dto.out.UsuarioDTOResponse;
 import com.javanauta.bffagendadortarefas.business.enums.StatusNotificacaoEnum;
 import org.springframework.cloud.openfeign.FeignClient;

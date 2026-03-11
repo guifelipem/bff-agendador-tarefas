@@ -4,7 +4,7 @@ import com.javanauta.bffagendadortarefas.business.TarefasService;
 import com.javanauta.bffagendadortarefas.business.dto.in.TarefasDTORequest;
 import com.javanauta.bffagendadortarefas.business.dto.out.TarefasDTOResponse;
 import com.javanauta.bffagendadortarefas.business.enums.StatusNotificacaoEnum;
-import com.javanauta.bffagendadortarefas.infrastructure.client.security.SecurityConfig;
+import com.javanauta.bffagendadortarefas.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -39,6 +39,7 @@ public class TarefasController {
     @Operation(summary = "Busca tarefas por período", description = "Busca tarefas cadastradas por período")
     @ApiResponse(responseCode = "200", description = "Tarefa encontrada")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<List<TarefasDTOResponse>> buscaListaDeTarefasPorPeriodo(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal,
@@ -52,6 +53,8 @@ public class TarefasController {
     @Operation(summary = "Busca lista de tarefas por email de usuário", description = "Busca tarefas cadastradas por usuário")
     @ApiResponse(responseCode = "200", description = "Tarefa encontrada")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    @ApiResponse(responseCode = "403", description = "Email não encontrado")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<List<TarefasDTOResponse>> buscaTarefasPorEmail(@RequestHeader(name = "Authorization", required = false) String token) {
         List<TarefasDTOResponse> tarefas = tarefasService.buscaTarefasPorEmail(token);
 
@@ -62,6 +65,8 @@ public class TarefasController {
     @Operation(summary = "Deleta tarefas por ID", description = "Deleta tarefas cadastradas por id")
     @ApiResponse(responseCode = "200", description = "Tarefa deletada")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    @ApiResponse(responseCode = "403", description = "Tarefa ID não encontrada")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<Void> deletaTarefaPorId(@RequestParam("id") String id,
                                                   @RequestHeader(name = "Authorization", required = false) String token) {
 
@@ -74,6 +79,8 @@ public class TarefasController {
     @Operation(summary = "Altera status de tarefas", description = "Altera status de tarefas cadastradas")
     @ApiResponse(responseCode = "200", description = "Status da tarefa alterado")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    @ApiResponse(responseCode = "403", description = "Tarefa ID não encontrada")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<TarefasDTOResponse> alteraStatusNotificacao(
             @RequestParam("status") StatusNotificacaoEnum status,
             @RequestParam("id") String id,
@@ -87,6 +94,7 @@ public class TarefasController {
     @Operation(summary = "Altera dados de tarefas", description = "Altera dados de tarefas cadastradas")
     @ApiResponse(responseCode = "200", description = "Tarefa alterada")
     @ApiResponse(responseCode = "500", description = "Erro de servidor")
+    @ApiResponse(responseCode = "403", description = "Tarefa ID não encontrada")
     public ResponseEntity<TarefasDTOResponse> updateTarefas(@RequestBody TarefasDTORequest dto,
                                                             @RequestParam("id") String id,
                                                             @RequestHeader(name = "Authorization", required = false) String token) {
