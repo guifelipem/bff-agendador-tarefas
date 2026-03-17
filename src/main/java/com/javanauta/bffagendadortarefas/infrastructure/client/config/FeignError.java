@@ -16,19 +16,21 @@ public class FeignError implements ErrorDecoder {
     @Override
     public Exception decode(String s, Response response) {
 
+        final String PREFIXO_ERRO = "Erro: ";
+
         String mensagemErro = mensagemErro(response);
 
         switch (response.status()) {
             case 409:
-                return new ConflictException("Erro: " + mensagemErro);
+                return new ConflictException(PREFIXO_ERRO + mensagemErro);
             case 403:
-                return new ResourceNotFoundException("Erro: " + mensagemErro);
+                return new ResourceNotFoundException(PREFIXO_ERRO + mensagemErro);
             case 401:
-                return new UnauthorizedException("Erro: " + mensagemErro);
+                return new UnauthorizedException(PREFIXO_ERRO + mensagemErro);
             case 400:
-                return new IllegalArgumentException("Erro: " + mensagemErro);
+                return new IllegalArgumentException(PREFIXO_ERRO + mensagemErro);
             default:
-                return new BusinessException("Erro: " + mensagemErro);
+                return new BusinessException(PREFIXO_ERRO + mensagemErro);
         }
     }
 
